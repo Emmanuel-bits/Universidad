@@ -1,0 +1,50 @@
+{% extends 'menu.html' %}
+{% load static %} {# Cargamoas la etiqueta 'static' si la necesitamos para algún ícono o imagen #}
+
+{% block title %}Nuevo Profesor{% endblock %} {# Título específico para esta página #}
+
+{% block content %}
+
+{# Contenedor principal con padding y fondo #}
+<div class="container-fluid p-4 bg-light text-dark">
+    {# Tarjeta para agrupar el formulario con sombra y borde #}
+    <div class="card shadow-sm border-0 rounded-lg mx-auto" style="max-width: 700px;"> {# mx-auto para centrar la tarjeta #}
+        <div class="card-body p-4"> {# Padding dentro del cuerpo de la tarjeta #}
+            <div class="row justify-content-center text-center mb-4">
+                <div class="col-12">
+                    <h2 class="display-5 text-primary">Registrar Nuevo Profesor</h2> {# Título grande y con color #}
+                    <p class="lead text-muted">Ingrese los datos del nuevo profesor.</p> {# Subtítulo descriptivo #}
+                </div>
+            </div>
+            <hr class="my-4"> {# Línea divisoria con margen vertical #}
+
+            <form method="POST" class="post-form">
+                {% csrf_token %}
+
+                {# Usamos form.as_table directamente aquí #}
+                <div class="table-responsive"> {# Para que la tabla sea responsiva #}
+                    <table class="table table-borderless align-middle"> {# Añadimos table-borderless y align-middle #}
+                        <tbody>
+                            {{ form.as_table }} {# Django renderizará los campos como filas de tabla aquí #}
+                        </tbody>
+                    </table>
+                </div>
+
+                {# Botones de acción #}
+                <div class="row justify-content-center mt-4">
+                    <div class="col-auto d-grid gap-2 d-md-flex justify-content-md-end"> {# Para alinear botones y dar espacio #}
+                        <button type="submit" class="btn btn-success btn-lg shadow-sm">
+                            <i class="bi bi-save me-2"></i> Guardar {# Icono de guardar #}
+                        </button>
+                        <a href="{% url 'showprofesor' %}" class="btn btn-secondary btn-lg shadow-sm" role="button">
+                            <i class="bi bi-x-circle me-2"></i> Cancelar {# Icono de cancelar #}
+                        </a>
+                    </div>
+                </div>
+            </form>
+
+        </div> {# Fin de card-body #}
+    </div> {# Fin de card #}
+</div> {# Fin de container-fluid #}
+
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'menu.html' %}
+{% load static %}
+
+{% block title %}Editar Profesor{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid p-4 bg-light text-dark"> {# Contenedor principal con padding y fondo #}
+    <div class="card shadow-sm border-0 rounded-lg"> {# Una tarjeta para meter todo el contenido del formulario #}
+        <div class="card-body">
+            <div class="row justify-content-center text-center mb-4"> {# Título centrado #}
+                <div class="col-12">
+                    <h1 class="display-4 text-primary">EDITAR PROFESOR</h1> {# Título más grande y con color #}
+                    <p class="lead text-muted">Actualiza la información del profesor seleccionado.</p> {# Subtítulo descriptivo #}
+                </div>
+            </div>
+            <hr class="my-4"> {# Separador #}
+
+            <div class="row justify-content-center"> {# Fila para centrar el formulario #}
+                <div class="col-12 col-md-10 col-lg-8"> {# Ajusta el ancho del formulario en diferentes pantallas #}
+                    <form method="POST" action="{% url 'updateprofesor' profesor.idprofesor %}" class="p-4 border rounded-lg shadow-sm bg-white"> {# Formulario con estilo de tarjeta #}
+                        {% csrf_token %}
+
+                        {# CAMPO NUMERO 1 DE LA TABLA #}
+                        <div class="form-group row mb-3"> {# mb-3 para margen inferior entre campos #}
+                            <label for="id_idprofesor" class="col-sm-4 col-form-label text-md-end">Número de Identificación:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control"
+                                       name="idprofesor" id="id_idprofesor" required maxlength="20"
+                                       value="{{ profesor.idprofesor }}" {% if not profesor.idprofesor %}placeholder="Ingrese la identificación"{% endif %} 
+                                       readonly/>
+                            </div>
+                        </div>
+                        {# CAMPO NUMERO 2 DE LA TABLA #}
+                        <div class="form-group row mb-3">
+                            <label for="id_nombre" class="col-sm-4 col-form-label text-md-end">Nombre:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control"
+                                       name="nombre" id="id_nombre" required maxlength="50"
+                                       value="{{ profesor.nombre }}" {% if not profesor.nombre %}placeholder="Ingrese el nombre"{% endif %} />
+                            </div>
+                        </div>
+                        {# CAMPO NUMERO 3 DE LA TABLA #}
+                        <div class="form-group row mb-3">
+                            <label for="id_apellido" class="col-sm-4 col-form-label text-md-end">Apellido:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control"
+                                       name="apellido" id="id_apellido" required maxlength="50"
+                                       value="{{ profesor.apellido }}" {% if not profesor.apellido %}placeholder="Ingrese el apellido"{% endif %} />
+                            </div>
+                        </div>
+                        {# CAMPO NUMERO 4 DE LA TABLA #}
+                        <div class="form-group row mb-3">
+                            <label for="id_direccion" class="col-sm-4 col-form-label text-md-end">Dirección:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control"
+                                       name="direccion" id="id_direccion" required maxlength="100"
+                                       value="{{ profesor.direccion }}" {% if not profesor.direccion %}placeholder="Ingrese la dirección"{% endif %} />
+                            </div>
+                        </div>
+                        {# CAMPO NUMERO 5 DE LA TABLA #}
+                        <div class="form-group row mb-3">
+                            <label for="id_telefono" class="col-sm-4 col-form-label text-md-end">Número telefónico:</label>
+                            <div class="col-sm-6">
+                                <input type="tel" class="form-control"
+                                       name="telefono" id="id_telefono" required maxlength="20"
+                                       value="{{ profesor.telefono }}" {% if not profesor.telefono %}placeholder="Ingrese el teléfono"{% endif %} />
+                            </div>
+                        </div>
+                        {# CAMPO NUMERO 6 DE LA TABLA #}
+                        <div class="form-group row mb-3">
+                            <label for="id_especialidad" class="col-sm-4 col-form-label text-md-end">Especialidad:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control"
+                                       name="especialidad" id="id_especialidad" required maxlength="50"
+                                       value="{{ profesor.especialidad }}" {% if not profesor.especialidad %}placeholder="Ingrese la especialidad"{% endif %} />
+                            </div>
+                        </div>
+                        {# CAMPO NUMERO 7 DE LA TABLA #}
+                        <div class="form-group row mb-3">
+                            <label for="id_email" class="col-sm-4 col-form-label text-md-end">Email:</label>
+                            <div class="col-sm-6">
+                                <input type="email" class="form-control"
+                                       name="email" id="id_email" required maxlength="50"
+                                       value="{{ profesor.email }}" {% if not profesor.email %}placeholder="Ingrese el email"{% endif %} />
+                            </div>
+                        </div>
+                        {# CAMPO NUMERO 8 DE LA TABLA #}
+                        <div class="form-group row mb-4"> {# mb-4 para margen antes de los botones #}
+                            <label for="id_fecha_ingreso" class="col-sm-4 col-form-label text-md-end">Fecha Ingreso:</label>
+                            <div class="col-sm-6">
+                                <input type="date" class="form-control"
+                                       name="fecha_ingreso" id="id_fecha_ingreso" required
+                                       value="{{ profesor.fecha_ingreso|date:'Y-m-d' }}" /> {# Formatear fecha para input type="date" #}
+                            </div>
+                        </div>
+
+                        {# Botones de acción #}
+                        <div class="row justify-content-center mt-4">
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-success btn-lg shadow-sm me-2">
+                                    <i class="bi bi-arrow-clockwise me-2"></i> Actualizar
+                                </button>
+                                <a href="{% url 'showprofesor' %}" class="btn btn-danger btn-lg shadow-sm" role="button">
+                                    <i class="bi bi-x-circle me-2"></i> Cancelar
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div> {# Fin de col #}
+            </div> {# Fin de row justify-content-center #}
+
+        </div> {# Fin de card-body #}
+    </div> {# Fin de card #}
+</div> {# Fin de container-fluid #}
+
+{% endblock %}

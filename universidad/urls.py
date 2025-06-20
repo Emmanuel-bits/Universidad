@@ -25,6 +25,12 @@ urlpatterns = [
     path('showprofesor/',views.profesorShow, name='showprofesor'),
     path('newprofesor/',views.profesorNew, name='newprofesor'),
     path('editprofesor/<int:idprofesor>/',views.profesorEdit, name='editprofesor'),
+    path('updateprofesor/<int:idprofesor>/',views.profesorUpdate, name='updateprofesor'),
     path('deleteprofesor/<int:idprofesor>/',views.profesorDestroy, name='deleteprofesor'),
+    path('showmateria/',views.materiaShow, name='showmateria'),
+    path('newmateria/',views.materiaNew, name='newmateria'),
+    path('editmateria/<int:idmateria>/',views.materiaEdit, name='editmateria'),
+    path('updatemateria/<int:idmateria>/',views.materiaUpdate, name='updatemateria'),
+    path('deletemateria/<int:idmateria>/',views.materiaDestroy, name='deletemateria'),
 
 ]

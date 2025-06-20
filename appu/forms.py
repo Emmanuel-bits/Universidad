@@ -1,5 +1,6 @@
 from django import forms
 from appu.models import Profesor
+from appu.models import Materia
 
 class ProfesorForm(forms.ModelForm):
     class Meta:
@@ -17,3 +18,8 @@ class ProfesorForm(forms.ModelForm):
             'fecha_ingreso': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}), # ¡Aquí está la clave!
             
         }
+
+class MateriaForm(forms.ModelForm):
+    class Meta:
+        model = Materia
+        fields = '__all__' # O la lista específica de campos que queremos usar

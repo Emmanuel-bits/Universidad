@@ -119,6 +119,7 @@ class Nota(models.Model):
 
 class Profesor(models.Model):
     idprofesor = models.AutoField(db_column='idProfesor', primary_key=True)  # Field name made lowercase.
+    imagen = models.ImageField(upload_to='profesores/', blank=True, null=True)
     nombre = models.CharField(max_length=30)
     apellido = models.CharField(max_length=20)
     direccion = models.CharField(max_length=80)

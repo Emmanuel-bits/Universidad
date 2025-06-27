@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load static %}
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,5 +54,8 @@
         </div>
     </div>
   </div>
+{% block extra_js %}
+<script src="{% static 'js/profesores.js' %}"></script>
+{% endblock %}
 </body>
 </html>

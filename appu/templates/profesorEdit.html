@@ -18,8 +18,25 @@
 
             <div class="row justify-content-center"> {# Fila para centrar el formulario #}
                 <div class="col-12 col-md-10 col-lg-8"> {# Ajusta el ancho del formulario en diferentes pantallas #}
-                    <form method="POST" action="{% url 'updateprofesor' profesor.idprofesor %}" class="p-4 border rounded-lg shadow-sm bg-white"> {# Formulario con estilo de tarjeta #}
+                    <form method="POST" action="{% url 'updateprofesor' profesor.idprofesor %}" class="p-4 border rounded-lg shadow-sm bg-white" enctype="multipart/form-data">
                         {% csrf_token %}
+
+                        <!-- Sección de imagen -->
+                        <div class="form-group row mb-4 text-center">
+                            <div class="col-12">
+                                <div class="image-preview-container mb-3">
+                                    <img id="imagePreview" 
+                                         src="{% if profesor.imagen %}{{ profesor.imagen.url }}{% else %}{% static 'imges/default-avatar.png' %}{% endif %}" 
+                                         class="img-thumbnail rounded-circle mx-auto d-block" 
+                                         style="width: 150px; height: 150px; object-fit: cover;"
+                                         alt="Foto del profesor">
+                                </div>
+                                <label for="id_imagen" class="form-label">Cambiar foto</label>
+                                <input type="file" class="form-control" id="id_imagen" 
+                                       name="imagen" accept="image/*">
+                                <div class="form-text">Formatos aceptados: JPG, PNG, GIF. Tamaño máximo: 2MB.</div>
+                            </div>
+                        </div>
 
                         {# CAMPO NUMERO 1 DE LA TABLA #}
                         <div class="form-group row mb-3"> {# mb-3 para margen inferior entre campos #}
@@ -31,6 +48,7 @@
                                        readonly/>
                             </div>
                         </div>
+
                         {# CAMPO NUMERO 2 DE LA TABLA #}
                         <div class="form-group row mb-3">
                             <label for="id_nombre" class="col-sm-4 col-form-label text-md-end">Nombre:</label>
@@ -99,7 +117,7 @@
                         <div class="row justify-content-center mt-4">
                             <div class="col-auto">
                                 <button type="submit" class="btn btn-success btn-lg shadow-sm me-2">
-                                    <i class="bi bi-arrow-clockwise me-2"></i> Actualizar
+                                    <i class="bi bi-arrow-clockwise me-2"></i> Guardar
                                 </button>
                                 <a href="{% url 'showprofesor' %}" class="btn btn-danger btn-lg shadow-sm" role="button">
                                     <i class="bi bi-x-circle me-2"></i> Cancelar
@@ -109,7 +127,6 @@
                     </form>
                 </div> {# Fin de col #}
             </div> {# Fin de row justify-content-center #}
-
         </div> {# Fin de card-body #}
     </div> {# Fin de card #}
 </div> {# Fin de container-fluid #}

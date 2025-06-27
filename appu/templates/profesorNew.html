@@ -18,17 +18,69 @@
             </div>
             <hr class="my-4"> {# Línea divisoria con margen vertical #}
 
-            <form method="POST" class="post-form">
+            <form method="POST"  enctype="multipart/form-data" class="post-form">
                 {% csrf_token %}
 
-                {# Usamos form.as_table directamente aquí #}
-                <div class="table-responsive"> {# Para que la tabla sea responsiva #}
-                    <table class="table table-borderless align-middle"> {# Añadimos table-borderless y align-middle #}
-                        <tbody>
-                            {{ form.as_table }} {# Django renderizará los campos como filas de tabla aquí #}
-                        </tbody>
-                    </table>
+                {# Campo para la imagen con vista previa #}
+                <div class="mb-4 text-center">
+                    <div class="image-preview-container mb-3">
+                        <img id="imagePreview" src="{% static 'images/default-avatar.png' %}" 
+                             class="img-thumbnail rounded-circle mx-auto d-block" 
+                             style="width: 150px; height: 150px; object-fit: cover;"
+                             alt="Vista previa de la imagen">
+                    </div>
+                    <label for="{{ form.imagen.id_for_label }}" class="form-label">Foto del Profesor</label>
+                    <input type="file" class="form-control" id="{{ form.imagen.id_for_label }}" 
+                           name="{{ form.imagen.name }}" accept="image/*">
+                    <div class="form-text">Formatos aceptados: JPG, PNG, GIF. Tamaño máximo: 2MB.</div>
                 </div>
+
+                {# Campos del formulario manuales #}
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="{{ form.nombre.id_for_label }}" 
+                               name="{{ form.nombre.name }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.apellido.id_for_label }}" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="{{ form.apellido.id_for_label }}" 
+                               name="{{ form.apellido.name }}" required>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.direccion.id_for_label }}" class="form-label">Dirección</label>
+                    <input type="text" class="form-control" id="{{ form.direccion.id_for_label }}" 
+                           name="{{ form.direccion.name }}" required>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label for="{{ form.telefono.id_for_label }}" class="form-label">Teléfono</label>
+                        <input type="text" class="form-control" id="{{ form.telefono.id_for_label }}" 
+                               name="{{ form.telefono.name }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="{{ form.email.id_for_label }}" 
+                               name="{{ form.email.name }}" required>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label for="{{ form.especialidad.id_for_label }}" class="form-label">Especialidad</label>
+                        <input type="text" class="form-control" id="{{ form.especialidad.id_for_label }}" 
+                               name="{{ form.especialidad.name }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.fecha_ingreso.id_for_label }}" class="form-label">Fecha de Ingreso</label>
+                        <input type="date" class="form-control" id="{{ form.fecha_ingreso.id_for_label }}" 
+                               name="{{ form.fecha_ingreso.name }}" required>
+                    </div>
+                </div>
+
 
                 {# Botones de acción #}
                 <div class="row justify-content-center mt-4">

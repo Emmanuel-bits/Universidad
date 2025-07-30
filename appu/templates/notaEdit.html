@@ -1,0 +1,84 @@
+{% extends 'menu.html' %}
+{% load static %}
+
+{% block title %}Editar Nota{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid p-4 bg-light text-dark">
+    <div class="card shadow-sm border-0 rounded-lg mx-auto" style="max-width: 700px;">
+        <div class="card-body p-4">
+            <div class="row justify-content-center text-center mb-4">
+                <div class="col-12">
+                    <h2 class="display-5 text-primary">Editar Nota</h2>
+                    <p class="lead text-muted">Actualiza la nota del estudiante en la materia seleccionada.</p>
+                </div>
+            </div>
+            <hr class="my-4">
+
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'updatenota' nota.id %}" class="p-4 border rounded-lg shadow-sm bg-white">
+                {% csrf_token %}
+
+                {# Campo ID de la Nota (Solo Lectura) #}
+                <div class="mb-4">
+                    <label for="id_nota_id" class="form-label">ID de la Nota:</label>
+                    <input type="text" class="form-control" id="id_nota_id" value="{{ nota.id }}" readonly/>
+                </div>
+
+                {# Campo Materia (Foreign Key) #}
+                <div class="mb-4">
+                    <label for="{{ form.idmateria.id_for_label }}" class="form-label">Materia <span class="text-danger">*</span></label>
+                    {{ form.idmateria }}
+                    {% for error in form.idmateria.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                    <div class="invalid-feedback"></div> {# Para errores JS #}
+                </div>
+
+                {# Campo Estudiante (Foreign Key) #}
+                <div class="mb-4">
+                    <label for="{{ form.idestudiante.id_for_label }}" class="form-label">Estudiante <span class="text-danger">*</span></label>
+                    {{ form.idestudiante }}
+                    {% for error in form.idestudiante.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                    <div class="invalid-feedback"></div> {# Para errores JS #}
+                </div>
+
+                {# Campo Nota #}
+                <div class="mb-4">
+                    <label for="{{ form.nota.id_for_label }}" class="form-label">Nota <span class="text-danger">*</span></label>
+                    <input type="number" step="0.01" class="form-control" id="{{ form.nota.id_for_label }}"
+                           name="{{ form.nota.name }}" required
+                           value="{{ form.nota.value|default_if_none:'' }}" min="0" max="20"/> {# Asumiendo nota de 0 a 20 #}
+                    {% for error in form.nota.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                    <div class="form-text text-muted">La nota debe estar entre 0.00 y 20.00.</div>
+                    <div class="invalid-feedback"></div> {# Para errores JS #}
+                </div>
+
+                {# Botones de acción #}
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'shownota' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left-circle-fill me-2"></i>Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-save-fill me-2"></i>Actualizar Nota
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

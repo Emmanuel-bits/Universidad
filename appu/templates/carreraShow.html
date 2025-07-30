@@ -1,0 +1,143 @@
+{% extends 'menu.html' %}
+{% load static %}
+{% block title %}Información de Carreras{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid p-4 bg-light text-dark"> {# Contenedor principal con padding y fondo #}
+    <div class="card shadow-sm border-0 rounded-lg"> {# Una tarjeta para meter todo el contenido #}
+        <div class="card-body">
+            <div class="row justify-content-center text-center mb-4"> {# Margen inferior #}
+                <div class="col-12">
+                    <h1 class="display-4 text-primary">CARRERAS</h1> {# Título principal #}
+                    <p class="lead text-muted">Gestión de la información de las carreras de la institución.</p> {# Subtítulo descriptivo #}
+                </div>
+            </div>
+            <hr class="my-4"> {# Línea divisoria #}
+
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10"> {# Ajustado el ancho de la columna para la tabla #}
+
+                    {# Campo de búsqueda #}
+                    <div class="mb-3">
+                        <input type="text" id="searchInputCarreras" class="form-control" placeholder="Buscar carrera...">
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover align-middle" id="carrerasTable"> {# ID de tabla para JavaScript #}
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="text-center">ID Carrera</th>
+                                    <th class="text-center">Nombre</th>
+                                    <th class="text-center">Número de Semestres</th>
+                                    <th class="text-center">Modalidad</th>
+                                    <th class="text-center">Mención</th>
+                                    <th class="text-center" style="width: 120px;">Acciones</th> {# Ancho fijo para acciones #}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {# Itera sobre la variable 'carrera' que será pasada desde la vista #}
+                                {% for c in carrera %} {# 'carrera' ahora es el page_obj #}
+                                <tr>
+                                    <td class="text-center">{{ c.idcarrera }}</td>
+                                    <td>{{ c.nombre }}</td>
+                                    <td class="text-center">{{ c.numero_semestre }}</td>
+                                    <td>{{ c.modalidad }}</td>
+                                    <td>{{ c.mencion }}</td>
+                                    <td class="text-center"> {# Centra las acciones dentro de la celda #}
+                                        <a href="{% url 'editcarrera' c.idcarrera %}" class="btn btn-warning btn-sm me-1" title="Editar">
+                                            <i class="bi bi-pencil-square"></i> {# Ícono de lápiz #}
+                                        </a>
+                                        {# Botón para modal de eliminación #}
+                                        <button type="button" class="btn btn-danger btn-sm"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#confirmDeleteCarreraModal" {# ID del modal de carrera #}
+                                                data-carrera-id="{{ c.idcarrera }}"       {# Atributo para pasar el ID #}
+                                                title="Eliminar">
+                                            <i class="bi bi-trash-fill"></i> {# Ícono de papelera #}
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {# Mensaje si no hay carreras #}
+                                {% if not carrera.object_list %} {# Usar object_list para verificar si hay elementos en la página #}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-4">
+                                        No hay carreras registradas.
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div> {# Fin de table-responsive #}
+                </div> {# Fin de col #}
+            </div> {# Fin de row justify-content-center #}
+
+            {# Controles de Paginación #}
+            <nav aria-label="Navegación de Carreras" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if carrera.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" aria-label="Primera">
+                                <span aria-hidden="true">&laquo; Primera</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ carrera.previous_page_number }}" aria-label="Anterior">
+                                <span aria-hidden="true">&lsaquo; Anterior</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active"><span class="page-link">{{ carrera.number }}</span></li>
+
+                    {% if carrera.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ carrera.next_page_number }}" aria-label="Siguiente">
+                                <span aria-hidden="true">Siguiente &rsaquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ carrera.paginator.num_pages }}" aria-label="Última">
+                                <span aria-hidden="true">Última &raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+            {# MODAL para confirmar eliminación de Carrera #}
+            <div class="modal fade" id="confirmDeleteCarreraModal" tabindex="-1" aria-labelledby="confirmDeleteCarreraModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="confirmDeleteCarreraModalLabel">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>Confirmar Eliminación
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Estás seguro de que deseas eliminar esta carrera? Esta acción no se puede deshacer.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <a id="confirmDeleteCarreraButton" href="#" class="btn btn-danger">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Botón "Nuevo Registro" #}
+            <div class="row justify-content-center mt-4"> {# Margen superior #}
+                <div class="col-auto">
+                    <a href="{% url 'newcarrera' %}" class="btn btn-success btn-lg shadow-sm" role="button">
+                        <i class="bi bi-plus-circle me-2"></i> Nuevo Registro
+                    </a> {# Botón grande y con sombra #}
+                </div>
+            </div>
+
+        </div> {# Fin de card-body #}
+    </div> {# Fin de card #}
+</div> {# Fin de container-fluid #}
+
+{% endblock %}

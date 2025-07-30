@@ -1,0 +1,118 @@
+{% extends 'menu.html' %}
+{% load static %}
+
+{% block title %}Nueva Aula{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid p-4 bg-light text-dark"> {# Contenedor principal con padding y fondo #}
+    <div class="card shadow-sm border-0 rounded-lg mx-auto" style="max-width: 700px;"> {# mx-auto para centrar la tarjeta #}
+        <div class="card-body p-4"> {# Padding dentro del cuerpo de la tarjeta #}
+            <div class="row justify-content-center text-center mb-4">
+                <div class="col-12">
+                    <h2 class="display-5 text-primary">Registrar Nueva Aula</h2> {# Título grande y con color #}
+                    <p class="lead text-muted">Ingrese los datos de la nueva aula.</p> {# Subtítulo descriptivo #}
+                </div>
+            </div>
+            <hr class="my-4"> {# Línea divisoria con margen vertical #}
+
+            <form method="POST" class="post-form">
+                {% csrf_token %}
+
+                {# Manejo de errores no asociados a campos específicos #}
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {# Campo Capacidad #}
+                <div class="form-group row mb-3">
+                    <label for="{{ form.capacidad.id_for_label }}" class="col-sm-4 col-form-label text-md-end">Capacidad:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control {% if form.capacidad.errors %}is-invalid{% endif %}"
+                               id="{{ form.capacidad.id_for_label }}" name="{{ form.capacidad.name }}" required
+                               value="{{ form.capacidad.value|default_if_none:'' }}" />
+                        {% for error in form.capacidad.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                        <div class="invalid-feedback"></div> {# Para JS #}
+                    </div>
+                </div>
+
+                {# Campo Aire Acondicionado #}
+                <div class="form-group row mb-3">
+                    <label for="{{ form.aire.id_for_label }}" class="col-sm-4 col-form-label text-md-end">Cantidad de Aires:</label>
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control {% if form.aire.errors %}is-invalid{% endif %}"
+                               id="{{ form.aire.id_for_label }}" name="{{ form.aire.name }}" required min="0"
+                               value="{{ form.aire.value|default_if_none:'' }}" />
+                        {% for error in form.aire.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                        <div class="invalid-feedback"></div> {# Para JS #}
+                    </div>
+                </div>
+
+                {# Campo Video Beam #}
+                <div class="form-group row mb-3">
+                    <label for="{{ form.videobeam.id_for_label }}" class="col-sm-4 col-form-label text-md-end">Cantidad de Video Beams:</label>
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control {% if form.videobeam.errors %}is-invalid{% endif %}"
+                               id="{{ form.videobeam.id_for_label }}" name="{{ form.videobeam.name }}" required min="0"
+                               value="{{ form.videobeam.value|default_if_none:'' }}" />
+                        {% for error in form.videobeam.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                        <div class="invalid-feedback"></div> {# Para JS #}
+                    </div>
+                </div>
+
+                {# Campo Pizarra #}
+                <div class="form-group row mb-3">
+                    <label for="{{ form.pizarra.id_for_label }}" class="col-sm-4 col-form-label text-md-end">Cantidad de Pizarras:</label>
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control {% if form.pizarra.errors %}is-invalid{% endif %}"
+                               id="{{ form.pizarra.id_for_label }}" name="{{ form.pizarra.name }}" required min="0"
+                               value="{{ form.pizarra.value|default_if_none:'' }}" />
+                        {% for error in form.pizarra.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                        <div class="invalid-feedback"></div> {# Para JS #}
+                    </div>
+                </div>
+
+                {# Campo Ubicación #}
+                <div class="form-group row mb-4">
+                    <label for="{{ form.ubicacion.id_for_label }}" class="col-sm-4 col-form-label text-md-end">Ubicación:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control {% if form.ubicacion.errors %}is-invalid{% endif %}"
+                               id="{{ form.ubicacion.id_for_label }}" name="{{ form.ubicacion.name }}" required
+                               value="{{ form.ubicacion.value|default_if_none:'' }}" />
+                        {% for error in form.ubicacion.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                        <div class="invalid-feedback"></div> {# Para JS #}
+                    </div>
+                </div>
+
+                {# Botones de acción #}
+                <div class="row justify-content-center mt-4">
+                    <div class="col-auto d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-success btn-lg shadow-sm">
+                            <i class="bi bi-save me-2"></i> Guardar
+                        </button>
+                        <a href="{% url 'showaula' %}" class="btn btn-secondary btn-lg shadow-sm" role="button">
+                            <i class="bi bi-x-circle me-2"></i> Cancelar
+                        </a>
+                    </div>
+                </div>
+            </form>
+
+        </div> {# Fin de card-body #}
+    </div> {# Fin de card #}
+</div> {# Fin de container-fluid #}
+
+{% endblock %}

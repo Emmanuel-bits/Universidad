@@ -1,0 +1,138 @@
+{% extends 'menu.html' %}
+{% load static %}
+{% block title %}Información de Aulas{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid p-4 bg-light text-dark"> {# Añadido 'p-4' para manejo de padding general #}
+    <div class="card shadow-sm border-0 rounded-lg"> {# Una tarjeta para meter todo el contenido #}
+        <div class="card-body">
+            <div class="row justify-content-center text-center mb-4"> {# mb-4 para margen inferior #}
+                <div class="col-12">
+                    <h1 class="display-4 text-primary">AULAS</h1> {# display-4 para tamaño, text-primary para color #}
+                    <p class="lead text-muted">Gestión de la información de las aulas de la institución.</p> {# Subtítulo descriptivo #}
+                </div>
+            </div>
+            <hr class="my-4"> {# my-4 para margen vertical #}
+
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8"> {# Ajustado el ancho de la columna para la tabla #}
+                    <div class="mb-3">
+                        <input type="text" id="searchInputAulas" class="form-control" placeholder="Buscar aula...">
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover align-middle" id="aulasTable"> {# align-middle para centrar contenido verticalmente #}
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="text-center">ID Aula</th>
+                                    <th class="text-center">Capacidad</th>
+                                    <th class="text-center">Aires</th>
+                                    <th class="text-center">Video Beams</th>
+                                    <th class="text-center">Pizarras</th>
+                                    <th class="text-center">Ubicación</th>
+                                    <th class="text-center" style="width: 120px;">Acciones</th> {# Ancho fijo para acciones #}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for a in aula %} {# 'aula' ahora es el page_obj #}
+                                <tr>
+                                    <td>{{ a.idaula }}</td>
+                                    <td>{{ a.capacidad }}</td>
+                                    <td>{{ a.aire }}</td> {# Ahora muestra la cantidad numérica #}
+                                    <td>{{ a.videobeam }}</td> {# Ahora muestra la cantidad numérica #}
+                                    <td>{{ a.pizarra }}</td> {# Ahora muestra la cantidad numérica #}
+                                    <td>{{ a.ubicacion }}</td>
+                                    <td class="text-center"> {# Centra las acciones dentro de la celda #}
+                                        <a href="{% url 'editaula' a.idaula %}" class="btn btn-warning btn-sm me-1" title="Editar">
+                                            <i class="bi bi-pencil-square"></i> {# Ícono de lápiz #}
+                                        </a>
+                                        <button type="button" class="btn btn-danger btn-sm"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#confirmDeleteAulaModal"
+                                                data-aula-id="{{ a.idaula }}"
+                                                title="Eliminar">
+                                            <i class="bi bi-trash-fill"></i> {# Ícono de papelera #}
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% if not aula.object_list %} {# Usar object_list para verificar si hay elementos en la página #}
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted py-4"> {# Colspan ajustado #}
+                                        No hay aulas registradas.
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div> {# Fin de table-responsive #}
+                </div> {# Fin de col #}
+            </div> {# Fin de row justify-content-center #}
+
+            {# Controles de Paginación #}
+            <nav aria-label="Navegación de Aulas" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if aula.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" aria-label="Primera">
+                                <span aria-hidden="true">&laquo; Primera</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ aula.previous_page_number }}" aria-label="Anterior">
+                                <span aria-hidden="true">&lsaquo; Anterior</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active"><span class="page-link">{{ aula.number }}</span></li>
+
+                    {% if aula.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ aula.next_page_number }}" aria-label="Siguiente">
+                                <span aria-hidden="true">Siguiente &rsaquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ aula.paginator.num_pages }}" aria-label="Última">
+                                <span aria-hidden="true">Última &raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+            <!-- Modal para confirmar eliminación de Aula -->
+            <div class="modal fade" id="confirmDeleteAulaModal" tabindex="-1" aria-labelledby="confirmDeleteAulaModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="confirmDeleteAulaModalLabel">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>Confirmar Eliminación
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Estás seguro de que deseas eliminar esta aula? Esta acción no se puede deshacer.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <a id="confirmDeleteAulaButton" href="#" class="btn btn-danger">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mt-4"> {# mt-4 para margen superior #}
+                <div class="col-auto">
+                    <a href="{% url 'newaula' %}" class="btn btn-success btn-lg shadow-sm" role="button">
+                        <i class="bi bi-plus-circle me-2"></i> Nuevo Registro
+                    </a> {# Botón grande y con sombra #}
+                </div>
+            </div>
+
+        </div> {# Fin de card-body #}
+    </div> {# Fin de card #}
+</div> {# Fin de container-fluid #}
+
+{% endblock %}

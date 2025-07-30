@@ -4,7 +4,7 @@ function showImage(imageUrl, nombre) {
     document.getElementById('imageModalLabel').textContent = nombre;
 }
 
-// Funciones para el formulario de nuevo/editar profesor (con mejoras de UX)
+// Funciones para el formulario de nuevo/editar estudiante (con mejoras de UX)
 function setupImagePreview() {
     const imagenInput = document.getElementById('id_imagen');
     const imagePreview = document.getElementById('imagePreview');
@@ -12,7 +12,8 @@ function setupImagePreview() {
     if (imagenInput && imagePreview) {
         imagenInput.addEventListener('change', function(event) {
             const file = event.target.files[0];
-            const errorContainer = imagenInput.nextElementSibling; // Asume que el error estará después del input o en un elemento hermano
+            // Asume que el error estará después del input o en un elemento hermano
+            const errorContainer = imagenInput.nextElementSibling; 
 
             if (!file) { // Si no se selecciona ningún archivo, limpiar errores y salir
                 if (errorContainer && errorContainer.classList.contains('invalid-feedback')) {
@@ -106,7 +107,8 @@ function setupFormValidation() {
             // Limpiar errores previos de validación JS
             setFieldError('id_telefono', '');
             setFieldError('id_email', '');
-            setFieldError('id_fecha_ingreso', '');
+            setFieldError('id_fecha_nac', '');
+            setFieldError('id_fecha_ing', '');
 
 
             // Validación de teléfono (solo números)
@@ -129,18 +131,35 @@ function setupFormValidation() {
                 }
             }
 
-            // Validación de fecha (no futura)
-            const fechaIngresoInput = document.getElementById('id_fecha_ingreso');
+            // Validación de fecha de nacimiento (no futura)
+            const fechaNacimientoInput = document.getElementById('id_fecha_nac');
+            if (fechaNacimientoInput) {
+                const fechaNacimiento = fechaNacimientoInput.value;
+                if (fechaNacimiento) {
+                    const hoy = new Date();
+                    hoy.setHours(0,0,0,0); 
+                    const fechaNacimientoDate = new Date(fechaNacimiento);
+                    fechaNacimientoDate.setHours(0,0,0,0); 
+
+                    if (fechaNacimientoDate > hoy) {
+                        setFieldError('id_fecha_nac', 'La fecha de nacimiento no puede ser futura.');
+                        isValid = false;
+                    }
+                }
+            }
+
+            // Validación de fecha de ingreso (no futura)
+            const fechaIngresoInput = document.getElementById('id_fecha_ing');
             if (fechaIngresoInput) {
                 const fechaIngreso = fechaIngresoInput.value;
                 if (fechaIngreso) {
                     const hoy = new Date();
-                    hoy.setHours(0,0,0,0); // Normalizar a medianoche para comparación solo por fecha
+                    hoy.setHours(0,0,0,0); 
                     const fechaIngresoDate = new Date(fechaIngreso);
-                    fechaIngresoDate.setHours(0,0,0,0); // Normalizar
+                    fechaIngresoDate.setHours(0,0,0,0); 
 
                     if (fechaIngresoDate > hoy) {
-                        setFieldError('id_fecha_ingreso', 'La fecha de ingreso no puede ser futura.');
+                        setFieldError('id_fecha_ing', 'La fecha de ingreso no puede ser futura.');
                         isValid = false;
                     }
                 }
@@ -148,14 +167,13 @@ function setupFormValidation() {
 
             // Validación de Bootstrap HTML5
             if (!form.checkValidity()) {
-                isValid = false; // Si la validación nativa falla, también es inválido
+                isValid = false;
             }
 
             if (!isValid) {
-                event.preventDefault(); // Detener el envío si alguna validación falla
-                event.stopPropagation(); // Evitar la propagación del evento
+                event.preventDefault(); 
+                event.stopPropagation();
             }
-            // Añadir la clase 'was-validated' para activar la validación visual de Bootstrap
             form.classList.add('was-validated');
         });
     }
@@ -163,46 +181,45 @@ function setupFormValidation() {
 
 // 4. Manejo de la modal de eliminación (NUEVO)
 document.addEventListener('DOMContentLoaded', function() {
-    const confirmDeleteModal = document.getElementById('confirmDeleteProfesorModal'); // Usar un ID diferente para profesores
+    const confirmDeleteModal = document.getElementById('confirmDeleteEstudianteModal'); // Usar ID del modal de estudiante
     if (confirmDeleteModal) {
-        const confirmDeleteButton = document.getElementById('confirmDeleteProfesorButton'); // Botón de eliminar dentro del modal
+        const confirmDeleteButton = document.getElementById('confirmDeleteEstudianteButton'); // Botón de eliminar dentro del modal
         
         confirmDeleteModal.addEventListener('show.bs.modal', function(event) {
             const button = event.relatedTarget; // El botón de la tabla que activó el modal
-            const profesorId = button.getAttribute('data-profesor-id'); // Obtener el ID del profesor
+            const estudianteId = button.getAttribute('data-estudiante-id'); // Obtener el ID del estudiante
 
-            if (confirmDeleteButton && profesorId) {
-                confirmDeleteButton.href = `/deleteprofesor/${profesorId}/`; // Ajustar la URL de eliminación
+            if (confirmDeleteButton && estudianteId) {
+                confirmDeleteButton.href = `/deleteestudiante/${estudianteId}/`; // Ajustar la URL de eliminación
             }
         });
     }
 });
 
 
-// 5. Funcionalidad de búsqueda en la tabla de profesores (NUEVO)
+// 5. Funcionalidad de búsqueda en la tabla de estudiantes (NUEVO)
 document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInputProfesores'); // Usar un ID diferente para profesores
-    const profesoresTable = document.getElementById('profesoresTable'); // ID de la tabla de profesores
+    const searchInput = document.getElementById('searchInputEstudiantes'); // Usar ID del buscador de estudiante
+    const estudiantesTable = document.getElementById('estudiantesTable'); // ID de la tabla de estudiantes
 
-    if (searchInput && profesoresTable) {
+    if (searchInput && estudiantesTable) {
         searchInput.addEventListener('keyup', function() {
             const searchText = this.value.toLowerCase();
-            const rows = profesoresTable.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+            const rows = estudiantesTable.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
 
             for (let i = 0; i < rows.length; i++) {
                 let row = rows[i];
-                // Celdas a buscar: todas excepto la última (acciones)
-                // Asegúrate de que los índices coincidan con tu tabla
+                // Celdas a buscar (ajusta los índices según las columnas de tu tabla de estudiante)
                 let cellsToSearch = [
                     row.cells[1], // Identificación
                     row.cells[2], // Nombre
                     row.cells[3], // Apellido
                     row.cells[4], // Dirección
                     row.cells[5], // Teléfono
-                    row.cells[6], // Especialidad
-                    row.cells[7],
-                    row.cells[8], // Email
-                    // Puedes añadir más si es necesario, ej. row.cells[8] para Fecha Ingreso
+                    row.cells[6], // Email
+                    row.cells[7], // Estado
+                    row.cells[8], // Fecha_nac
+                    row.cells[9], // Fecha_ing
                 ];
                 let found = false;
 
@@ -230,11 +247,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Inicialización cuando el DOM está listo
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Script de profesores cargado correctamente');
-
-    // Configurar vista previa de imagen (para formulario de nuevo/editar profesor)
+    console.log('Script de estudiantes cargado correctamente - Versión con búsqueda y modal de eliminación');
+    
+    // Configurar vista previa de imagen (para formulario de nuevo/editar estudiante)
     setupImagePreview();
-
+    
     // Configurar validaciones del formulario
     setupFormValidation();
 

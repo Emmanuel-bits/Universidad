@@ -1,50 +1,86 @@
 {% extends 'menu.html' %}
-{% load static %} {# Cargamoas la etiqueta 'static' si la necesitamos para algún ícono o imagen #}
+{% load static %}
 
-{% block title %}Nueva Materia{% endblock %} {# Título específico para esta página #}
+{% block title %}Nueva Materia{% endblock %}
 
 {% block content %}
 
-{# Contenedor principal con padding y fondo #}
 <div class="container-fluid p-4 bg-light text-dark">
-    {# Tarjeta para agrupar el formulario con sombra y borde #}
-    <div class="card shadow-sm border-0 rounded-lg mx-auto" style="max-width: 700px;"> {# mx-auto para centrar la tarjeta #}
-        <div class="card-body p-4"> {# Padding dentro del cuerpo de la tarjeta #}
+    <div class="card shadow-sm border-0 rounded-lg mx-auto" style="max-width: 700px;">
+        <div class="card-body p-4">
             <div class="row justify-content-center text-center mb-4">
                 <div class="col-12">
-                    <h2 class="display-5 text-primary">Registrar Nueva Materia</h2> {# Título grande y con color #}
-                    <p class="lead text-muted">Ingrese los datos de la nueva materia.</p> {# Subtítulo descriptivo #}
+                    <h2 class="display-5 text-primary">REGISTRAR NUEVA MATERIA</h2>
+                    <p class="lead text-muted">Ingrese los datos de la nueva materia.</p>
                 </div>
             </div>
-            <hr class="my-4"> {# Línea divisoria con margen vertical #}
+            <hr class="my-4">
 
-            <form method="POST" class="post-form">
-                {% csrf_token %}
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8">
+                    <form method="POST" class="p-4 border rounded-lg shadow-sm bg-white">
+                        {% csrf_token %}
 
-                {# Usamos form.as_table directamente aquí #}
-                <div class="table-responsive"> {# Para que la tabla sea responsiva #}
-                    <table class="table table-borderless align-middle"> {# Añadimos table-borderless y align-middle #}
-                        <tbody>
-                            {{ form.as_table }} {# Django renderizará los campos como filas de tabla aquí #}
-                        </tbody>
-                    </table>
+                        <!-- Campo Nombre de Materia -->
+                        <div class="mb-3">
+                            <label for="{{ form.nombre_materia.id_for_label }}" class="form-label fw-bold">Nombre de Materia <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control {% if form.nombre_materia.errors %}is-invalid{% endif %}"
+                                   id="{{ form.nombre_materia.id_for_label }}" name="{{ form.nombre_materia.name }}"
+                                   value="{{ form.nombre_materia.value|default_if_none:'' }}" required maxlength="40">
+                            {% for error in form.nombre_materia.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                            <div class="invalid-feedback"></div> {# Para validación JS si aplica #}
+                        </div>
+
+                        <!-- Campo Unidades de Créditos -->
+                        <div class="mb-3">
+                            <label for="{{ form.unidades_creditos.id_for_label }}" class="form-label fw-bold">Unidades de Créditos <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control {% if form.unidades_creditos.errors %}is-invalid{% endif %}"
+                                   id="{{ form.unidades_creditos.id_for_label }}" name="{{ form.unidades_creditos.name }}"
+                                   value="{{ form.unidades_creditos.value|default_if_none:'' }}" required min="0">
+                            {% for error in form.unidades_creditos.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                            <div class="invalid-feedback"></div> {# Para validación JS si aplica #}
+                        </div>
+
+                        <!-- Campo Modalidad -->
+                        <div class="mb-3">
+                            <label for="{{ form.modalidad.id_for_label }}" class="form-label fw-bold">Modalidad <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control {% if form.modalidad.errors %}is-invalid{% endif %}"
+                                   id="{{ form.modalidad.id_for_label }}" name="{{ form.modalidad.name }}"
+                                   value="{{ form.modalidad.value|default_if_none:'' }}" required maxlength="20">
+                            {% for error in form.modalidad.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                            <div class="invalid-feedback"></div> {# Para validación JS si aplica #}
+                        </div>
+
+                        <!-- Campo idCarrera (ForeignKey) -->
+                        <div class="mb-3">
+                            <label for="{{ form.idcarrera.id_for_label }}" class="form-label fw-bold">Carrera <span class="text-danger">*</span></label>
+                            {{ form.idcarrera }} {# Django renderizará el <select> aquí con los nombres de las carreras #}
+                            {% for error in form.idcarrera.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                            <div class="invalid-feedback"></div> {# Para validación JS si aplica #}
+                        </div>
+
+                        {# Botones de acción #}
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'showmateria' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left-circle-fill me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="bi bi-save-fill me-2"></i>Guardar Materia
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-                {# Botones de acción #}
-                <div class="row justify-content-center mt-4">
-                    <div class="col-auto d-grid gap-2 d-md-flex justify-content-md-end"> {# Para alinear botones y dar espacio #}
-                        <button type="submit" class="btn btn-success btn-lg shadow-sm">
-                            <i class="bi bi-save me-2"></i> Guardar {# Icono de guardar #}
-                        </button>
-                        <a href="{% url 'showmateria' %}" class="btn btn-secondary btn-lg shadow-sm" role="button">
-                            <i class="bi bi-x-circle me-2"></i> Cancelar {# Icono de cancelar #}
-                        </a>
-                    </div>
-                </div>
-            </form>
-
-        </div> {# Fin de card-body #}
-    </div> {# Fin de card #}
-</div> {# Fin de container-fluid #}
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

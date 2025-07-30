@@ -1,0 +1,108 @@
+{% extends 'menu.html' %}
+{% load static %}
+
+{% block title %}Nuevo Horario de Profesor{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-4 bg-light text-dark">
+    <div class="card shadow-sm border-0 rounded-lg mx-auto" style="max-width: 700px;">
+        <div class="card-body p-4">
+            <div class="row justify-content-center text-center mb-4">
+                <div class="col-12">
+                    <h2 class="display-5 text-primary">REGISTRAR NUEVO HORARIO DE PROFESOR</h2>
+                    <p class="lead text-muted">Ingrese los datos del nuevo horario para un profesor.</p>
+                </div>
+            </div>
+            <hr class="my-4">
+
+            <form method="POST" action="" class="p-4 border rounded-lg shadow-sm bg-white">
+                {% csrf_token %}
+
+                <!-- Mostrar errores no asociados a campos específicos -->
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {# Campo Profesor (ForeignKey) #}
+                <div class="mb-3">
+                    <label for="{{ form.idprofesor.id_for_label }}" class="form-label">Profesor</label>
+                    {{ form.idprofesor }} {# Django renderiza el select con nombres (gracias a __str__) #}
+                    {% for error in form.idprofesor.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                {# Campo Materia (ForeignKey) #}
+                <div class="mb-3">
+                    <label for="{{ form.idmateria.id_for_label }}" class="form-label">Materia</label>
+                    {{ form.idmateria }} {# Django renderiza el select con nombres #}
+                    {% for error in form.idmateria.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                {# Campo Día #}
+                <div class="mb-3">
+                    <label for="{{ form.dia.id_for_label }}" class="form-label">Día</label>
+                    <input type="text" class="form-control" id="{{ form.dia.id_for_label }}"
+                           name="{{ form.dia.name }}" value="{{ form.dia.value|default_if_none:'' }}" required maxlength="15">
+                    {% for error in form.dia.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                {# Campo Horario de Inicio #}
+                <div class="mb-3">
+                    <label for="{{ form.horario_inicio.id_for_label }}" class="form-label">Hora de Inicio</label>
+                    <input type="text" class="form-control" id="{{ form.horario_inicio.id_for_label }}"
+                           name="{{ form.horario_inicio.name }}" value="{{ form.horario_inicio.value|default_if_none:'' }}" required placeholder="HH:MM" maxlength="15">
+                    {% for error in form.horario_inicio.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                {# Campo Horario de Fin #}
+                <div class="mb-3">
+                    <label for="{{ form.horario_fin.id_for_label }}" class="form-label">Hora de Fin</label>
+                    <input type="text" class="form-control" id="{{ form.horario_fin.id_for_label }}"
+                           name="{{ form.horario_fin.name }}" value="{{ form.horario_fin.value|default_if_none:'' }}" required placeholder="HH:MM" maxlength="15">
+                    {% for error in form.horario_fin.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                {# Campo Aula (ForeignKey) #}
+                <div class="mb-3">
+                    <label for="{{ form.idaula.id_for_label }}" class="form-label">Aula</label>
+                    {{ form.idaula }} {# Django renderiza el select con nombres #}
+                    {% for error in form.idaula.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                {# Botones de acción #}
+                <div class="row justify-content-center mt-4">
+                    <div class="col-auto d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-success btn-lg shadow-sm">
+                            <i class="bi bi-save me-2"></i> Guardar
+                        </button>
+                        <a href="{% url 'showhorarioprofesor' %}" class="btn btn-secondary btn-lg shadow-sm" role="button">
+                            <i class="bi bi-x-circle me-2"></i> Cancelar
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'menu.html' %}
 {% load static %}
-{% block title %}Información de Profesores{% endblock %}
+{% block title %}Información de Estudiantes{% endblock %}
 
 {% block content %}
 
@@ -9,8 +9,8 @@
         <div class="card-body">
             <div class="row justify-content-center text-center mb-4">
                 <div class="col-12">
-                    <h1 class="display-4 text-primary">PROFESORES</h1>
-                    <p class="lead text-muted">Gestión de la información de los profesores de la institución.</p>
+                    <h1 class="display-4 text-primary">ESTUDIANTES</h1>
+                    <p class="lead text-muted">Gestión de la información de los estudiantes de la institución.</p>
                 </div>
             </div>
             <hr class="my-4">
@@ -18,12 +18,13 @@
             <div class="row justify-content-center">
                 <div class="col-12 col-md-22 col-lg-12">
 
+                    {# Campo de búsqueda AÑADIDO #}
                     <div class="mb-3">
-                        <input type="text" id="searchInputProfesores" class="form-control" placeholder="Buscar profesor...">
+                        <input type="text" id="searchInputEstudiantes" class="form-control" placeholder="Buscar estudiante...">
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover align-middle" id="profesoresTable">
+                        <table class="table table-striped table-bordered table-hover align-middle" id="estudiantesTable"> {# ID de tabla AÑADIDO #}
                             <thead class="table-dark">
                                 <tr>
                                     <th class="text-center">Foto</th>
@@ -32,14 +33,15 @@
                                     <th class="text-center">Apellido</th>
                                     <th class="text-center">Dirección</th>
                                     <th class="text-center">Teléfono</th>
-                                    <th class="text-center">Especialidad</th>
                                     <th class="text-center">Email</th>
+                                    <th class="text-center">Estado</th>
+                                    <th class="text-center">Fecha Nacimiento</th>
                                     <th class="text-center">Fecha Ingreso</th>
                                     <th class="text-center" style="width: 120px;">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for i in profesor %} {# 'profesor' ahora es el page_obj #}
+                                {% for i in estudiante %} {# 'estudiante' ahora es el page_obj #}
                                 <tr>
                                     <td class="text-center">
                                         {% if i.imagen %}
@@ -58,32 +60,33 @@
                                         {% endif %}
                                     </td>
 
-                                    <td>{{ i.idprofesor }}</td>
+                                    <td>{{ i.idestudiante }}</td>
                                     <td>{{ i.nombre }}</td>
                                     <td>{{ i.apellido }}</td>
                                     <td>{{ i.direccion }}</td>
                                     <td>{{ i.telefono }}</td>
-                                    <td>{{ i.especialidad }}</td>
                                     <td>{{ i.email }}</td>
-                                    <td>{{ i.fecha_ingreso }}</td>
+                                    <td>{{ i.estado }}</td>
+                                    <td>{{ i.fecha_nac }}</td>
+                                    <td>{{ i.fecha_ing }}</td>
                                     <td class="text-center">
-                                        <a href="{% url 'editprofesor' i.idprofesor %}" class="btn btn-warning btn-sm me-1" title="Editar">
+                                        <a href="{% url 'editestudiante' i.idestudiante %}" class="btn btn-warning btn-sm me-1" title="Editar">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
                                         <button type="button" class="btn btn-danger btn-sm"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#confirmDeleteProfesorModal"
-                                                data-profesor-id="{{ i.idprofesor }}"
+                                                data-bs-target="#confirmDeleteEstudianteModal"
+                                                data-estudiante-id="{{ i.idestudiante }}"
                                                 title="Eliminar">
                                             <i class="bi bi-trash-fill"></i>
                                         </button>
                                     </td>
                                 </tr>
                                 {% endfor %}
-                                {% if not profesor.object_list %} {# Usar object_list para verificar si hay elementos en la página #}
+                                {% if not estudiante.object_list %} {# Usar object_list para verificar si hay elementos en la página #}
                                 <tr>
-                                    <td colspan="10" class="text-center text-muted py-4">
-                                        No hay profesores registrados.
+                                    <td colspan="11" class="text-center text-muted py-4">
+                                        No hay estudiantes registrados.
                                     </td>
                                 </tr>
                                 {% endif %}
@@ -94,31 +97,31 @@
             </div>
 
             {# Controles de Paginación #}
-            <nav aria-label="Navegación de Profesores" class="mt-4">
+            <nav aria-label="Navegación de Estudiantes" class="mt-4">
                 <ul class="pagination justify-content-center">
-                    {% if profesor.has_previous %}
+                    {% if estudiante.has_previous %}
                         <li class="page-item">
                             <a class="page-link" href="?page=1" aria-label="Primera">
                                 <span aria-hidden="true">&laquo; Primera</span>
                             </a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ profesor.previous_page_number }}" aria-label="Anterior">
+                            <a class="page-link" href="?page={{ estudiante.previous_page_number }}" aria-label="Anterior">
                                 <span aria-hidden="true">&lsaquo; Anterior</span>
                             </a>
                         </li>
                     {% endif %}
 
-                    <li class="page-item active"><span class="page-link">{{ profesor.number }}</span></li>
+                    <li class="page-item active"><span class="page-link">{{ estudiante.number }}</span></li>
 
-                    {% if profesor.has_next %}
+                    {% if estudiante.has_next %}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ profesor.next_page_number }}" aria-label="Siguiente">
+                            <a class="page-link" href="?page={{ estudiante.next_page_number }}" aria-label="Siguiente">
                                 <span aria-hidden="true">Siguiente &rsaquo;</span>
                             </a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ profesor.paginator.num_pages }}" aria-label="Última">
+                            <a class="page-link" href="?page={{ estudiante.paginator.num_pages }}" aria-label="Última">
                                 <span aria-hidden="true">Última &raquo;</span>
                             </a>
                         </li>
@@ -144,22 +147,22 @@
                 </div>
             </div>
 
-            <!-- Modal para confirmar eliminación de Profesor -->
-            <div class="modal fade" id="confirmDeleteProfesorModal" tabindex="-1" aria-labelledby="confirmDeleteProfesorModalLabel" aria-hidden="true">
+            <!-- Modal para confirmar eliminación de Estudiante -->
+            <div class="modal fade" id="confirmDeleteEstudianteModal" tabindex="-1" aria-labelledby="confirmDeleteEstudianteModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header bg-danger text-white">
-                            <h5 class="modal-title" id="confirmDeleteProfesorModalLabel">
+                            <h5 class="modal-title" id="confirmDeleteEstudianteModalLabel">
                                 <i class="bi bi-exclamation-triangle-fill me-2"></i>Confirmar Eliminación
                             </h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            ¿Estás seguro de que deseas eliminar este profesor? Esta acción no se puede deshacer.
+                            ¿Estás seguro de que deseas eliminar este estudiante? Esta acción no se puede deshacer.
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <a id="confirmDeleteProfesorButton" href="#" class="btn btn-danger">Eliminar</a>
+                            <a id="confirmDeleteEstudianteButton" href="#" class="btn btn-danger">Eliminar</a>
                         </div>
                     </div>
                 </div>
@@ -167,7 +170,7 @@
 
             <div class="row justify-content-center mt-4">
                 <div class="col-auto">
-                    <a href="{% url 'newprofesor' %}" class="btn btn-success btn-lg shadow-sm" role="button">
+                    <a href="{% url 'newestudiante' %}" class="btn btn-success btn-lg shadow-sm" role="button">
                         <i class="bi bi-plus-circle me-2"></i> Nuevo Registro
                     </a>
                 </div>

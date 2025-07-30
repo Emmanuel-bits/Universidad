@@ -1,0 +1,92 @@
+{% extends 'menu.html' %}
+{% load static %}
+
+{% block title %}Nueva Carrera{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid p-4 bg-light text-dark">
+    <div class="card shadow-sm border-0 rounded-lg mx-auto" style="max-width: 700px;">
+        <div class="card-body p-4">
+            <div class="row justify-content-center text-center mb-4">
+                <div class="col-12">
+                    <h2 class="display-5 text-primary">Registrar Nueva Carrera</h2>
+                    <p class="lead text-muted">Ingrese los datos de la nueva carrera.</p>
+                </div>
+            </div>
+            <hr class="my-4">
+
+            {# Formulario para registrar Carrera #}
+            <form method="POST" enctype="multipart/form-data" class="post-form needs-validation" novalidate id="carreraForm"> {# Añadida validación de Bootstrap y ID #}
+                {% csrf_token %}
+
+                {# Mensajes de error no asociados a campos específicos #}
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {# Campos del formulario #}
+                <div class="mb-3">
+                    <label for="{{ form.nombre.id_for_label }}" class="form-label fw-bold">Nombre de la Carrera <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control {% if form.nombre.errors %}is-invalid{% endif %}"
+                           id="{{ form.nombre.id_for_label }}" name="{{ form.nombre.name }}"
+                           value="{{ form.nombre.value|default_if_none:'' }}" required maxlength="{{ form.nombre.field.max_length }}">
+                    {% for error in form.nombre.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                    <div class="invalid-feedback"></div> {# Contenedor para errores de validación JS #}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.numero_semestre.id_for_label }}" class="form-label fw-bold">Número de Semestres <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control {% if form.numero_semestre.errors %}is-invalid{% endif %}"
+                           id="{{ form.numero_semestre.id_for_label }}" name="{{ form.numero_semestre.name }}"
+                           value="{{ form.numero_semestre.value|default_if_none:'' }}" required>
+                    {% for error in form.numero_semestre.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                    <div class="invalid-feedback"></div> {# Contenedor para errores de validación JS #}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.modalidad.id_for_label }}" class="form-label fw-bold">Modalidad <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control {% if form.modalidad.errors %}is-invalid{% endif %}"
+                           id="{{ form.modalidad.id_for_label }}" name="{{ form.modalidad.name }}"
+                           value="{{ form.modalidad.value|default_if_none:'' }}" required maxlength="{{ form.modalidad.field.max_length }}">
+                    {% for error in form.modalidad.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                    <div class="invalid-feedback"></div> {# Contenedor para errores de validación JS #}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.mencion.id_for_label }}" class="form-label fw-bold">Mención</label>
+                    <input type="text" class="form-control {% if form.mencion.errors %}is-invalid{% endif %}"
+                           id="{{ form.mencion.id_for_label }}" name="{{ form.mencion.name }}"
+                           value="{{ form.mencion.value|default_if_none:'' }}" maxlength="{{ form.mencion.field.max_length }}">
+                    {% for error in form.mencion.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                    <div class="invalid-feedback"></div> {# Contenedor para errores de validación JS #}
+                </div>
+
+                {# Botones de acción #}
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'showcarrera' %}" class="btn btn-outline-secondary btn-lg shadow-sm" role="button">
+                        <i class="bi bi-x-circle me-2"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-success btn-lg shadow-sm">
+                        <i class="bi bi-save me-2"></i> Guardar Carrera
+                    </button>
+                </div>
+            </form>
+
+        </div> {# Fin de card-body #}
+    </div> {# Fin de card #}
+</div> {# Fin de container-fluid #}
+
+{% endblock %}

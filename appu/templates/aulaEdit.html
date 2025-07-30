@@ -1,0 +1,131 @@
+{% extends 'menu.html' %}
+{% load static %}
+
+{% block title %}Editar Aula{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid p-4 bg-light text-dark"> {# Contenedor principal con padding y fondo #}
+    <div class="card shadow-sm border-0 rounded-lg"> {# Una tarjeta para meter todo el contenido del formulario #}
+        <div class="card-body">
+            <div class="row justify-content-center text-center mb-4"> {# Título centrado #}
+                <div class="col-12">
+                    <h1 class="display-4 text-primary">EDITAR AULA</h1> {# Título más grande y con color #}
+                    <p class="lead text-muted">Actualiza la información del aula seleccionada.</p> {# Subtítulo descriptivo #}
+                </div>
+            </div>
+            <hr class="my-4"> {# Separador #}
+
+            <div class="row justify-content-center"> {# Fila para centrar el formulario #}
+                <div class="col-12 col-md-10 col-lg-8"> {# Ajusta el ancho del formulario en diferentes pantallas #}
+                    <form method="POST" action="{% url 'updateaula' aula.idaula %}" class="p-4 border rounded-lg shadow-sm bg-white">
+                        {% csrf_token %}
+
+                        {# Manejo de errores no asociados a campos específicos #}
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        {# Campo ID Aula (solo lectura) #}
+                        <div class="form-group row mb-3">
+                            <label for="{{ form.idaula.id_for_label }}" class="col-sm-4 col-form-label text-md-end">ID Aula:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control"
+                                       id="{{ form.idaula.id_for_label }}" name="{{ form.idaula.name }}"
+                                       value="{{ form.idaula.value }}" readonly />
+                            </div>
+                        </div>
+
+                        {# Campo Capacidad #}
+                        <div class="form-group row mb-3">
+                            <label for="{{ form.capacidad.id_for_label }}" class="col-sm-4 col-form-label text-md-end">Capacidad:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control {% if form.capacidad.errors %}is-invalid{% endif %}"
+                                       id="{{ form.capacidad.id_for_label }}" name="{{ form.capacidad.name }}" required
+                                       value="{{ form.capacidad.value|default_if_none:'' }}" />
+                                {% for error in form.capacidad.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                                <div class="invalid-feedback"></div> {# Para JS #}
+                            </div>
+                        </div>
+
+                        {# Campo Aire Acondicionado #}
+                        <div class="form-group row mb-3">
+                            <label for="{{ form.aire.id_for_label }}" class="col-sm-4 col-form-label text-md-end">Cantidad de Aires:</label>
+                            <div class="col-sm-6">
+                                <input type="number" class="form-control {% if form.aire.errors %}is-invalid{% endif %}"
+                                       id="{{ form.aire.id_for_label }}" name="{{ form.aire.name }}" required min="0"
+                                       value="{{ form.aire.value|default_if_none:'' }}" />
+                                {% for error in form.aire.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                                <div class="invalid-feedback"></div> {# Para JS #}
+                            </div>
+                        </div>
+
+                        {# Campo Video Beam #}
+                        <div class="form-group row mb-3">
+                            <label for="{{ form.videobeam.id_for_label }}" class="col-sm-4 col-form-label text-md-end">Cantidad de Video Beams:</label>
+                            <div class="col-sm-6">
+                                <input type="number" class="form-control {% if form.videobeam.errors %}is-invalid{% endif %}"
+                                       id="{{ form.videobeam.id_for_label }}" name="{{ form.videobeam.name }}" required min="0"
+                                       value="{{ form.videobeam.value|default_if_none:'' }}" />
+                                {% for error in form.videobeam.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                                <div class="invalid-feedback"></div> {# Para JS #}
+                            </div>
+                        </div>
+
+                        {# Campo Pizarra #}
+                        <div class="form-group row mb-3">
+                            <label for="{{ form.pizarra.id_for_label }}" class="col-sm-4 col-form-label text-md-end">Cantidad de Pizarras:</label>
+                            <div class="col-sm-6">
+                                <input type="number" class="form-control {% if form.pizarra.errors %}is-invalid{% endif %}"
+                                       id="{{ form.pizarra.id_for_label }}" name="{{ form.pizarra.name }}" required min="0"
+                                       value="{{ form.pizarra.value|default_if_none:'' }}" />
+                                {% for error in form.pizarra.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                                <div class="invalid-feedback"></div> {# Para JS #}
+                            </div>
+                        </div>
+
+                        {# Campo Ubicación #}
+                        <div class="form-group row mb-4">
+                            <label for="{{ form.ubicacion.id_for_label }}" class="col-sm-4 col-form-label text-md-end">Ubicación:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control {% if form.ubicacion.errors %}is-invalid{% endif %}"
+                                       id="{{ form.ubicacion.id_for_label }}" name="{{ form.ubicacion.name }}" required
+                                       value="{{ form.ubicacion.value|default_if_none:'' }}" />
+                                {% for error in form.ubicacion.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                                <div class="invalid-feedback"></div> {# Para JS #}
+                            </div>
+                        </div>
+
+                        {# Botones de acción #}
+                        <div class="row justify-content-center mt-4">
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-success btn-lg shadow-sm me-2">
+                                    <i class="bi bi-arrow-clockwise me-2"></i> Guardar
+                                </button>
+                                <a href="{% url 'showaula' %}" class="btn btn-danger btn-lg shadow-sm" role="button">
+                                    <i class="bi bi-x-circle me-2"></i> Cancelar
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div> {# Fin de col #}
+            </div> {# Fin de row justify-content-center #}
+        </div> {# Fin de card-body #}
+    </div> {# Fin de card #}
+</div> {# Fin de container-fluid #}
+
+{% endblock %}

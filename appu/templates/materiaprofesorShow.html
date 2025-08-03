@@ -31,7 +31,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for mp in materiaprofesor %}
+                                {% for mp in materiaprofesor %} {# 'materiaprofesor' ahora es el page_obj #}
                                 <tr>
                                     <td class="text-center">{{ mp.id }}</td>
                                     <td>{{ mp.idprofesor.nombre }} {{ mp.idprofesor.apellido }}</td>
@@ -50,7 +50,7 @@
                                     </td>
                                 </tr>
                                 {% endfor %}
-                                {% if not materiaprofesor %}
+                                {% if not materiaprofesor.object_list %} {# Usar object_list para verificar si hay elementos en la página #}
                                 <tr>
                                     <td colspan="4" class="text-center text-muted py-4">
                                         No hay asignaciones de materia a profesor registradas.
@@ -62,6 +62,39 @@
                     </div>
                 </div>
             </div>
+
+            {# Controles de Paginación #}
+            <nav aria-label="Navegación de Asignaciones Materia-Profesor" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if materiaprofesor.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" aria-label="Primera">
+                                <span aria-hidden="true">&laquo; Primera</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ materiaprofesor.previous_page_number }}" aria-label="Anterior">
+                                <span aria-hidden="true">&lsaquo; Anterior</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active"><span class="page-link">{{ materiaprofesor.number }}</span></li>
+
+                    {% if materiaprofesor.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ materiaprofesor.next_page_number }}" aria-label="Siguiente">
+                                <span aria-hidden="true">Siguiente &rsaquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ materiaprofesor.paginator.num_pages }}" aria-label="Última">
+                                <span aria-hidden="true">Última &raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
 
             <!-- Modal para confirmar eliminación de MateriaProfesor -->
             <div class="modal fade" id="confirmDeleteMateriaProfesorModal" tabindex="-1" aria-labelledby="confirmDeleteMateriaProfesorModalLabel" aria-hidden="true">

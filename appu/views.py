@@ -286,7 +286,7 @@ def horarioestudianteNew(request):
     return render(request, 'horarioestudianteNew.html', {'form': form})
 
 def horarioestudianteShow(request):
-    horarioestudiantes_list = HorarioEstudiante.objects.all() # Obtener todos los objetos
+    horarioestudiantes_list = HorarioEstudiante.objects.all().order_by('id') # Obtener todos los objetos
     paginator = Paginator(horarioestudiantes_list, 5) # Mostrar 5 horarios por página
     page_number = request.GET.get('page') # Obtener el número de página de la URL
     page_obj = paginator.get_page(page_number) # Obtener el objeto de página
@@ -335,7 +335,7 @@ def horarioprofesorNew(request):
     return render(request, 'horarioprofesorNew.html', {'form': form})
 
 def horarioprofesorShow(request):
-    horarioprofesor_list = HorarioProfesor.objects.all() # Obtener todos los objetos
+    horarioprofesor_list = HorarioProfesor.objects.all().order_by('id') # Obtener todos los objetos
     paginator = Paginator(horarioprofesor_list, 5) # Mostrar 5 horarios por página
     page_number = request.GET.get('page') # Obtener el número de página de la URL
     page_obj = paginator.get_page(page_number) # Obtener el objeto de página
@@ -382,7 +382,7 @@ def carreraestudianteNew(request):
     return render(request, 'carreraestudianteNew.html', {'form': form})
 
 def carreraestudianteShow(request):
-    carreraestudiante_list = CarreraEstudiante.objects.all() # Obtener todos los objetos
+    carreraestudiante_list = CarreraEstudiante.objects.all().order_by('id') # Obtener todos los objetos
     paginator = Paginator(carreraestudiante_list, 5) # Mostrar 5 registros por página
     page_number = request.GET.get('page') # Obtener el número de página de la URL
     page_obj = paginator.get_page(page_number) # Obtener el objeto de página
@@ -429,7 +429,7 @@ def materiaprofesorNew(request):
     return render(request,'materiaprofesorNew.html',{'form':form})
 
 def materiaprofesorShow(request):
-    materiaprofesor_list = MateriaProfesor.objects.all() # Obtener todos los objetos
+    materiaprofesor_list = MateriaProfesor.objects.all().order_by('id') # Obtener todos los objetos
     paginator = Paginator(materiaprofesor_list, 5) # Mostrar 5 registros por página
     page_number = request.GET.get('page') # Obtener el número de página de la URL
     page_obj = paginator.get_page(page_number) # Obtener el objeto de página
@@ -477,7 +477,7 @@ def notaNew(request):
     return render(request,'notaNew.html',{'form':form})
 
 def notaShow(request):
-    nota_list = Nota.objects.all() # Obtener todos los objetos
+    nota_list = Nota.objects.all().order_by('id') # Obtener todos los objetos
     paginator = Paginator(nota_list, 5) # Mostrar 5 notas por página
     page_number = request.GET.get('page') # Obtener el número de página de la URL
     page_obj = paginator.get_page(page_number) # Obtener el objeto de página
